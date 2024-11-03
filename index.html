@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Quiz App</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet"href="style.css">
+</head>
+<body>
+    <div class="container quiz mt-5">
+        <h2 class="text-center text-white">Simple Quiz App</h2>
+        <div id="quiz-container" class="question-card card p-4">
+            <h4 id="question" class="mb-3"></h4>
+            <div id="options" class="list-group"></div>
+            <button id="next-btn" class="btn btn-primary mt-3">Next</button>
+        </div>
+        <div id="result-container" class="card p-4 text-center d-none">
+            <h3>Your Score: <span id="score"></span>/<span id="total"></span></h3>
+            <button id="restart-btn" class="btn btn-success mt-3">Restart Quiz</button>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const quizData = [
+    {
+        question: "Which planet is known as the Red Planet?",
+        options: ["Earth", "Mars", "Jupiter", "Saturn"],
+        answer: "Mars"
+    },
+    {
+        question: "What is the largest mammal in the world?",
+        options: ["Elephant", "Blue Whale", "Giraffe", "Great White Shark"],
+        answer: "Blue Whale"
+    },
+    {
+        question: "In which country is the Great Pyramid of Giza located?",
+        options: ["Mexico", "China", "Egypt", "Peru"],
+        answer: "Egypt"
+    },
+    {
+        question: "Who wrote the play 'Romeo and Juliet'?",
+        options: ["Charles Dickens", "William Shakespeare", "Leo Tolstoy", "Mark Twain"],
+        answer: "William Shakespeare"
+    },
+    {
+        question: "What is the hardest natural substance on Earth?",
+        options: ["Gold", "Iron", "Diamond", "Quartz"],
+        answer: "Diamond"
+    },
+    {
+        question: "Which ocean is the largest by area?",
+        options: ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"],
+        answer: "Pacific Ocean"
+    },
+    {
+        question: "What is the capital of Japan?",
+        options: ["Tokyo", "Kyoto", "Osaka", "Hiroshima"],
+        answer: "Tokyo"
+    },
+    {
+        question: "Who discovered gravity when he saw a falling apple?",
+        options: ["Albert Einstein", "Isaac Newton", "Galileo Galilei", "Nikola Tesla"],
+        answer: "Isaac Newton"
+    },
+    {
+        question: "Which gas do plants absorb from the atmosphere?",
+        options: ["Oxygen", "Carbon Dioxide", "Nitrogen", "Hydrogen"],
+        answer: "Carbon Dioxide"
+    },
+    {
+        question: "How many continents are there on Earth?",
+        options: ["5", "6", "7", "8"],
+        answer: "7"
+    }
+];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            const currentQuestion = quizData[currentQuestionIndex];
+            $('#question').text(currentQuestion.question);
+            $('#options').empty();
+
+            currentQuestion.options.forEach(option => {
+                $('#options').append(`
+                    <button class="list-group-item list-group-item-action option">${option}</button>
+                `);
+            });
+
+            $('.option').click(function() {
+                $('.option').removeClass('active');
+                $(this).addClass('active');
+            });
+        }
+
+        function showResult() {
+            $('#quiz-container').hide();
+            $('#result-container').removeClass('d-none');
+            $('#score').text(score);
+            $('#total').text(quizData.length);
+        }
+
+        $('#next-btn').click(function() {
+            const selectedOption = $('.option.active').text();
+            if (!selectedOption) {
+                alert("Please select an answer!");
+                return;
+            }
+
+            const correctAnswer = quizData[currentQuestionIndex].answer;
+            if (selectedOption === correctAnswer) {
+                score++;
+            }
+
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizData.length) {
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        });
+
+        $('#restart-btn').click(function() {
+            score = 0;
+            currentQuestionIndex = 0;
+            $('#result-container').addClass('d-none');
+            $('#quiz-container').show();
+            loadQuestion();
+        });
+
+        loadQuestion();
+    </script>
+</body>
+</html>
